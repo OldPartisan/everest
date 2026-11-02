@@ -30,7 +30,7 @@ npm run dev
 # http://localhost:3000/  — в dev basePath отключён
 ```
 
-Node.js **20+** (проверено на 20 и 24).
+Node.js **20+** (локально проверено на 24; CI настроен на 20).
 
 ### Production-сборка
 
