@@ -20,7 +20,7 @@
 - **Framer Motion** — появление секций, счётчики, раскрытие таймлайна, модальные окна.
 - **GSAP ScrollTrigger** — параллакс hero и «прорисовка» линии таймлайна.
 - **React Three Fiber + Drei** — 3D-модель массива Эвереста (GLB, SRTM/DEM), маршрут и лагеря.
-- **MapLibre GL JS + OpenStreetMap** — карта без API-ключей и без Leaflet: grayscale-стилизация, flyTo по лагерям, атрибуция OSM.
+- **MapLibre GL JS + OpenStreetMap** — карта без API-ключей: grayscale-стилизация, flyTo по лагерям, атрибуция OSM.
 - **Zod** — валидация JSON-данных на этапе сборки.
 - Деплой — **GitHub Pages**, ветка `gh-pages`; готовый workflow для Actions лежит в `docs/github-actions-deploy.yml`.
 
