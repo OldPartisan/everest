@@ -217,11 +217,11 @@ python3 scripts/generate_model.py /path/N27E086.hgt /path/N28E086.hgt
 
 ## Аудит
 
-Lighthouse на **живом GitHub Pages**:
+Lighthouse на **живом GitHub Pages** (мобильный Performance зависит от симуляции сети):
 
 | Режим | Performance | Accessibility | Best Practices | SEO |
 | --- | ---: | ---: | ---: | ---: |
-| Mobile | **93** | **100** | 96 | **100** |
+| Mobile | **87–93** | **100** | 96 | **100** |
 | Desktop | **99** | **100** | **100** | **100** |
 
 - axe-core (WCAG 2.1 AA): **0** нарушений на 1440 и 360 px.
