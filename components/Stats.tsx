@@ -26,7 +26,7 @@ export default function Stats() {
                   <span>{stat.label}</span>
                 </dt>
                 <dd>
-                  <span className="number-display text-[clamp(2rem,4vw,3.55rem)]">
+                  <span className="number-display text-[clamp(1.8rem,2.8vw,2.9rem)]">
                     <AnimatedNumber
                       value={stat.value}
                       decimals={stat.decimals}

@@ -98,9 +98,21 @@ function Fallback({
                 : 'Модель загрузится при приближении к секции.')}
         </p>
         {!unsupported && onEnable && (
-          <button type="button" className="button-ghost mt-4 border-white/30 bg-white/10 text-white hover:bg-white/20" onClick={onEnable}>
-            <Play size={13} strokeWidth={1.5} aria-hidden="true" />
-            Включить 3D
+          <button
+            type="button"
+            aria-label="Включить интерактивную 3D-модель"
+            className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-3 bg-ink-0/5 text-white transition-colors hover:bg-ink-0/20"
+            onClick={onEnable}
+          >
+            <span className="flex h-16 w-16 items-center justify-center rounded-full border border-white/40 bg-ink-0/40 shadow-lift backdrop-blur transition-transform duration-500 hover:scale-105">
+              <Play size={22} strokeWidth={1.5} fill="currentColor" aria-hidden="true" />
+            </span>
+            <span className="font-display text-sm font-semibold uppercase tracking-[0.16em]">
+              Включить 3D
+            </span>
+            <span className="text-[9px] uppercase tracking-[0.16em] text-white/60">
+              интерактивный рельеф
+            </span>
           </button>
         )}
       </div>
@@ -139,10 +151,16 @@ export default function Everest3D({ route, activeCampId, onSelectCamp, visible =
   const auto = supported === true && !mobile && inView;
   const enabled = manual || auto;
 
+  useEffect(() => {
+    if (visible && supported === true) setManual(true);
+  }, [supported, visible]);
+
   return (
     <div
       ref={ref}
-      className="relative h-full min-h-[320px] w-full overflow-hidden rounded-lg border border-line bg-bg-1"
+      className={`relative h-full min-h-[320px] w-full overflow-hidden rounded-lg border border-line ${
+        enabled ? 'bg-ink-0' : 'bg-bg-1'
+      }`}
       role="group"
       aria-label={`Трёхмерная модель массива Эвереста и ${route.name.toLowerCase()}`}
     >
@@ -160,11 +178,11 @@ export default function Everest3D({ route, activeCampId, onSelectCamp, visible =
             <MountainScene route={route} activeCampId={activeCampId} onSelectCamp={onSelectCamp} />
           </SceneBoundary>
           <div className="pointer-events-none absolute inset-x-0 top-0 flex items-center justify-between p-4">
-            <span className="inline-flex items-center gap-2 rounded-full border border-ink-0/10 bg-white/80 px-3 py-1.5 text-[9px] font-medium uppercase tracking-[0.18em] text-ink-0 backdrop-blur">
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-ink-0/55 px-3 py-1.5 text-[9px] font-medium uppercase tracking-[0.18em] text-white backdrop-blur">
               <Box size={11} strokeWidth={1.5} aria-hidden="true" />
               3D · режим просмотра
             </span>
-            <span className="text-[9px] uppercase tracking-[0.16em] text-ink-1">SRTM · DEM · верт. ×4</span>
+            <span className="text-[9px] uppercase tracking-[0.16em] text-white/55">SRTM · DEM · верт. ×4</span>
           </div>
           <div className="pointer-events-none absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 bg-gradient-to-t from-ink-0/55 to-transparent p-4 pt-14">
             <p className="text-[9px] uppercase tracking-[0.16em] text-white/85">

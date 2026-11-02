@@ -32,7 +32,7 @@ const campTypeLabel: Record<string, string> = {
 export default function RouteExplorer() {
   const [routeId, setRouteId] = useState<Route['id']>('south');
   const [campId, setCampId] = useState<string | null>(null);
-  const [panel, setPanel] = useState<'map' | '3d'>('map');
+  const [panel, setPanel] = useState<'map' | '3d'>('3d');
   const mapFrame = useRef<HTMLDivElement>(null);
   const mapInView = useInView(mapFrame, { once: true, margin: '320px 0px' });
   const reduced = useReducedMotion();
@@ -136,7 +136,7 @@ export default function RouteExplorer() {
                   route={route}
                   activeCampId={campId}
                   onSelectCamp={(id) => setCampId((current) => (current === id ? null : id))}
-                  visible={panel === 'map'}
+                  visible
                 />
               ) : (
                 <div className="flex h-full w-full items-center justify-center bg-bg-1">

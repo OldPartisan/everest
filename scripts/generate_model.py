@@ -84,11 +84,30 @@ def main(paths: list[str]) -> None:
                 )
             )
 
-    max_elev = max(p[1] for p in points)
+    # One gentle Gaussian pass removes SRTM pixel noise while keeping the massif shape.
+    elevations = [p[1] for p in points]
+    for _ in range(2):
+        smoothed = elevations[:]
+        for iz in range(GRID_Z):
+            for ix in range(GRID_X):
+                total = 0.0
+                weight = 0.0
+                for dz in (-1, 0, 1):
+                    zz = max(0, min(GRID_Z - 1, iz + dz))
+                    for dx in (-1, 0, 1):
+                        xx = max(0, min(GRID_X - 1, ix + dx))
+                        w = (4 if dx == 0 and dz == 0 else 2 if dx == 0 or dz == 0 else 1)
+                        total += elevations[zz * GRID_X + xx] * w
+                        weight += w
+                smoothed[iz * GRID_X + ix] = total / weight
+        elevations = smoothed
+
+    max_elev = max(elevations)
     vertical_scale = MODEL_HEIGHT / (max_elev - BASE_ELEV)
     positions: list[float] = []
     colors: list[float] = []
-    for index, (x, elevation, z) in enumerate(points):
+    for index, (x, _elevation, z) in enumerate(points):
+        elevation = elevations[index]
         y = max(0.0, (elevation - BASE_ELEV) * vertical_scale)
         ix = index % GRID_X
         iz = index // GRID_X

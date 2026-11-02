@@ -9,6 +9,8 @@
 
 ![Превью сайта: Эверест](docs/preview.webp)
 
+![3D-модель и карта маршрутов](docs/preview-3d.webp)
+
 ---
 
 ## Стек
@@ -146,7 +148,8 @@ GitHub Pages отдаёт только статические файлы, поэ
 ├── docs/
 │   ├── research.md
 │   ├── github-actions-deploy.yml
-│   └── preview.webp
+│   ├── preview.webp
+│   └── preview-3d.webp
 ├── next.config.js
 ├── tailwind.config.ts
 ├── package.json
@@ -198,13 +201,13 @@ python3 scripts/generate_model.py /path/N27E086.hgt /path/N28E086.hgt
 
 ## Производительность и доступность
 
-- 3D и Leaflet загружаются лениво при приближении к секции; на мобильных 3D по умолчанию
-  заменено изображением с кнопкой «Включить 3D».
+- 3D и Leaflet загружаются лениво при приближении к секции; на мобильных вкладка «3D-рельеф»
+  открывается по умолчанию; при отсутствии WebGL показывается изображение с резервным описанием.
 - Есть fallback при отсутствии WebGL и error boundary для сцены.
 - `prefers-reduced-motion` отключает параллакс, счётчики и тяжёлые переходы.
 - Семантические `section`/`h1–h3`, skip-link, focus-visible, `aria-expanded`, `aria-pressed`,
   `aria-controls`, модальное окно с фокус-ловушкой и Escape.
-- Фотографии — WebP, шрифты — локальные WOFF2, без внешних запросов к Google Fonts.
+- Фотографии — AVIF/WebP, шрифты — локальные WOFF2, без внешних запросов к Google Fonts.
 - OpenGraph 1200×630, canonical, JSON-LD, sitemap, robots.
 
 ## Аудит

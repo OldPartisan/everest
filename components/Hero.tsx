@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, useReducedMotion } from 'framer-motion';
-import { ArrowDown } from 'lucide-react';
+import { ArrowDown, Box } from 'lucide-react';
 import { useEffect, useRef, type CSSProperties } from 'react';
 
 import MountainRidges from '@/components/MountainRidges';
@@ -30,8 +30,6 @@ const titleItem = {
 export default function Hero() {
   const root = useRef<HTMLElement>(null);
   const media = useRef<HTMLDivElement>(null);
-  const far = useRef<HTMLDivElement>(null);
-  const near = useRef<HTMLDivElement>(null);
   const content = useRef<HTMLDivElement>(null);
   const reduced = useReducedMotion();
 
@@ -47,55 +45,73 @@ export default function Hero() {
       gsap.registerPlugin(ScrollTrigger);
 
       if (!root.current || !media.current) return;
+      const rootElement = root.current;
       const context = gsap.context(() => {
+        const baseTrigger = {
+          trigger: rootElement,
+          start: 'top top',
+          end: 'bottom top',
+          scrub: true,
+        };
+
         gsap.to(media.current, {
-          yPercent: 11,
-          scale: 1.045,
+          yPercent: 16,
+          scale: 1.08,
           ease: 'none',
-          scrollTrigger: {
-            trigger: root.current,
-            start: 'top top',
-            end: 'bottom top',
-            scrub: true,
-          },
+          scrollTrigger: baseTrigger,
         });
-        if (far.current) {
-          gsap.to(far.current, {
-            yPercent: -10,
-            ease: 'none',
-            scrollTrigger: {
-              trigger: root.current,
-              start: 'top top',
-              end: 'bottom top',
-              scrub: true,
-            },
-          });
-        }
-        if (near.current) {
-          gsap.to(near.current, {
-            yPercent: 7,
-            ease: 'none',
-            scrollTrigger: {
-              trigger: root.current,
-              start: 'top top',
-              end: 'bottom top',
-              scrub: true,
-            },
-          });
-        }
+
         if (content.current) {
           gsap.to(content.current, {
-            yPercent: -6,
-            opacity: 0.45,
+            yPercent: -11,
+            opacity: 0.35,
             ease: 'none',
             scrollTrigger: {
-              trigger: root.current,
-              start: '35% top',
+              trigger: rootElement,
+              start: '22% top',
               end: 'bottom top',
               scrub: true,
             },
           });
         }
+
+        const topo = rootElement.querySelector<HTMLElement>('[data-topo]');
+        if (topo) {
+          gsap.to(topo, {
+            xPercent: -6,
+            yPercent: 12,
+            ease: 'none',
+            scrollTrigger: baseTrigger,
+          });
+        }
+
+        const ghost = rootElement.querySelector<HTMLElement>('[data-ghost]');
+        if (ghost) {
+          gsap.to(ghost, {
+            xPercent: -4,
+            yPercent: -18,
+            ease: 'none',
+            scrollTrigger: baseTrigger,
+          });
+        }
+
+        rootElement.querySelectorAll<HTMLElement>('[data-fog]').forEach((fog) => {
+          const direction = fog.dataset.fog === 'far' ? 1 : -1;
+          gsap.to(fog, {
+            xPercent: 7 * direction,
+            yPercent: -9,
+            ease: 'none',
+            scrollTrigger: baseTrigger,
+          });
+        });
+
+        rootElement.querySelectorAll<HTMLElement>('[data-depth]').forEach((layer) => {
+          gsap.to(layer, {
+            yPercent: Number(layer.dataset.depth ?? 0),
+            ease: 'none',
+            scrollTrigger: baseTrigger,
+          });
+        });
       }, root);
 
       requestAnimationFrame(() => ScrollTrigger.refresh());
@@ -114,7 +130,7 @@ export default function Hero() {
     <section id="top" ref={root} className="relative isolate min-h-[100svh] overflow-hidden bg-ink-0 text-white">
       <div
         ref={media}
-        className="hero-media hero-photo absolute inset-0 -z-20"
+        className="hero-media hero-photo absolute -bottom-[10%] -top-[10%] inset-x-0 -z-20"
         role="img"
         aria-label="Северо-восточная стена Эвереста и Западный плечевой гребень над ледником Кхумбу"
         style={
@@ -127,15 +143,36 @@ export default function Hero() {
       <div className="hero-shade absolute inset-0 -z-10" aria-hidden="true" />
       <div className="grain absolute inset-0 -z-[5] opacity-40" aria-hidden="true" />
 
-      <div className="pointer-events-none absolute inset-0 z-[1] opacity-[0.13]" aria-hidden="true">
+      <div
+        data-topo
+        className="pointer-events-none absolute inset-0 z-[1] opacity-[0.16]"
+        aria-hidden="true"
+      >
         <TopoLines className="h-full w-full" />
       </div>
 
-      <div ref={far} className="pointer-events-none absolute inset-0 z-[2]" aria-hidden="true">
+      <div
+        data-ghost
+        className="pointer-events-none absolute right-[2%] top-[29%] z-[1] select-none font-display text-[20vw] font-semibold leading-none tracking-[-0.08em] text-white/[0.035]"
+        aria-hidden="true"
+      >
+        8848
+      </div>
+
+      <div className="pointer-events-none absolute inset-0 z-[2]" aria-hidden="true">
         <MountainRidges />
       </div>
 
-      <div className="hero-fog pointer-events-none absolute inset-x-0 bottom-[14%] z-[3] h-56 animate-fog" aria-hidden="true" />
+      <div
+        data-fog="far"
+        className="hero-fog pointer-events-none absolute inset-x-[-6%] bottom-[22%] z-[3] h-48 opacity-70"
+        aria-hidden="true"
+      />
+      <div
+        data-fog="near"
+        className="hero-fog pointer-events-none absolute inset-x-[-4%] bottom-[5%] z-[3] h-56 opacity-80"
+        aria-hidden="true"
+      />
 
       <div ref={content} className="relative z-10 flex min-h-[100svh] flex-col pb-8 pt-28 md:pb-10 md:pt-32">
         <div className="shell flex-1">
@@ -184,7 +221,7 @@ export default function Hero() {
             </motion.div>
           </motion.div>
 
-          <div ref={near} className="relative">
+          <div className="relative">
             <motion.div
               initial={reduced ? false : { opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -195,15 +232,27 @@ export default function Hero() {
                 Высочайшая точка Земли над уровнем моря — и один из самых внимательно
                 задокументированных, спорных и дорогих маршрутов в мире.
               </p>
-              <a
-                href="#stats"
-                className="group inline-flex w-fit items-center gap-3 text-[10px] font-medium uppercase tracking-[0.2em] text-white/80 transition-colors hover:text-white"
-              >
-                Смотреть дальше
-                <span className="flex h-9 w-9 items-center justify-center rounded-full border border-white/25 transition-colors group-hover:border-white/60">
-                  <ArrowDown size={14} strokeWidth={1.5} className="animate-drift" />
-                </span>
-              </a>
+              <div className="flex flex-col items-start gap-3 rounded-lg border border-white/25 p-4 backdrop-blur-md md:items-end"
+                style={{ backgroundColor: 'rgba(15, 23, 42, 0.62)' }}>
+                <a
+                  href="#routes"
+                  aria-label="Перейти к интерактивной 3D-модели"
+                  className="inline-flex w-fit items-center gap-2 rounded border border-white/40 bg-white/10 px-3 py-2 text-[10px] font-medium uppercase tracking-[0.18em] text-white transition-colors hover:border-white/80 hover:bg-white/20"
+                >
+                  <Box size={13} strokeWidth={1.5} aria-hidden="true" />
+                  3D-модель
+                  <span aria-hidden="true">↗</span>
+                </a>
+                <a
+                  href="#stats"
+                  className="group inline-flex w-fit items-center gap-3 text-[10px] font-medium uppercase tracking-[0.2em] text-white/80 transition-colors hover:text-white"
+                >
+                  Смотреть дальше
+                  <span className="flex h-9 w-9 items-center justify-center rounded-full border border-white/25 transition-colors group-hover:border-white/60">
+                    <ArrowDown size={14} strokeWidth={1.5} className="animate-drift" />
+                  </span>
+                </a>
+              </div>
             </motion.div>
 
             <div className="mt-7 grid grid-cols-3 gap-4 border-t border-white/15 pt-5 text-white/70">

@@ -3,7 +3,7 @@
 import { Html, OrbitControls, useGLTF } from '@react-three/drei';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { useReducedMotion } from 'framer-motion';
-import { Suspense, useEffect, useMemo, useRef } from 'react';
+import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import {
   CatmullRomCurve3,
   Mesh,
@@ -108,7 +108,7 @@ function CampMarker({
       {active && (
         <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, 0.012, 0]}>
           <torusGeometry args={[0.075, 0.006, 8, 32]} />
-          <meshBasicMaterial color="#1e293b" />
+          <meshBasicMaterial color="#f8fafc" />
         </mesh>
       )}
       <mesh
@@ -128,14 +128,14 @@ function CampMarker({
       >
         <sphereGeometry args={[active ? 0.062 : 0.045, 20, 20]} />
         <meshStandardMaterial
-          color={active ? '#1e293b' : camp.type === 'summit' ? '#334155' : '#94a3b8'}
+          color={active ? '#f8fafc' : camp.type === 'summit' ? '#e2e8f0' : '#94a3b8'}
           roughness={0.55}
           metalness={0.05}
           depthTest={false}
         />
       </mesh>
       {(active || camp.type === 'summit') && (
-        <Html position={[0, camp.type === 'summit' ? 0.1 : 0.18, 0]} center zIndexRange={[30, 0]} style={{ pointerEvents: 'none' }}>
+        <Html position={[0, camp.type === 'summit' ? -0.28 : 0.18, 0]} center zIndexRange={[30, 0]} style={{ pointerEvents: 'none' }}>
           <div className="scene-label">
             <span>{camp.type === 'summit' ? 'Эверест' : camp.shortName}</span>
             <strong>{formatAltitude(camp.altitude)} м</strong>
@@ -154,11 +154,21 @@ function CameraRig({
   activeCampId: string | null;
 }) {
   const controls = useRef<OrbitControlsImpl>(null);
-  const animating = useRef(false);
+  const animating = useRef(true);
   const reduced = useReducedMotion();
+  const [autoRotate, setAutoRotate] = useState(false);
 
   const desiredPosition = useRef(new Vector3(0.28, 1.52, 5.15));
   const desiredTarget = useRef(new Vector3(0, 0.9, 0));
+
+  useEffect(() => {
+    setAutoRotate(false);
+    if (!reduced && !activeCampId) {
+      const timer = window.setTimeout(() => setAutoRotate(true), 2400);
+      return () => window.clearTimeout(timer);
+    }
+    return undefined;
+  }, [activeCampId, reduced]);
 
   useEffect(() => {
     const camp = route.camps.find((item) => item.id === activeCampId);
@@ -198,8 +208,11 @@ function CameraRig({
       maxDistance={7.5}
       maxPolarAngle={Math.PI * 0.48}
       minPolarAngle={Math.PI * 0.12}
+      autoRotate={autoRotate}
+      autoRotateSpeed={0.42}
       onStart={() => {
         animating.current = false;
+        setAutoRotate(false);
       }}
       makeDefault
     />
@@ -238,12 +251,13 @@ function SceneContent({
 }) {
   return (
     <>
-      <color attach="background" args={['#eef2f6']} />
-      <fog attach="fog" args={['#eef2f6', 7.5, 13]} />
-      <ambientLight intensity={0.32} color="#f8fafc" />
-      <hemisphereLight intensity={0.28} color="#ffffff" groundColor="#94a3b8" />
-      <directionalLight position={[4.5, 6, 3.5]} intensity={1.15} color="#ffffff" />
-      <directionalLight position={[-4, 2.5, -3]} intensity={0.25} color="#dbeafe" />
+      <color attach="background" args={['#0f172a']} />
+      <fog attach="fog" args={['#0f172a', 7.5, 14]} />
+      <ambientLight intensity={0.65} color="#e2e8f0" />
+      <hemisphereLight intensity={0.45} color="#ffffff" groundColor="#64748b" />
+      <directionalLight position={[4.5, 6, 3.5]} intensity={1.85} color="#ffffff" />
+      <directionalLight position={[-4, 2.5, -3]} intensity={0.5} color="#cbd5e1" />
+      <pointLight position={[-2.5, 2.8, 3]} intensity={3.5} distance={7} color="#94a3b8" />
 
       <group rotation={[0, -0.04, 0]}>
         <Terrain />
@@ -277,7 +291,8 @@ export default function MountainScene({
     <Canvas
       dpr={[1, 1.6]}
       camera={{ position: [0.28, 1.52, 5.15], fov: 33, near: 0.1, far: 30 }}
-      gl={{ antialias: true, alpha: true, powerPreference: 'high-performance', toneMappingExposure: 0.82 }}
+      gl={{ antialias: true, alpha: false, powerPreference: 'high-performance', toneMappingExposure: 0.82 }}
+      onCreated={({ gl }) => gl.setClearColor('#0f172a', 1)}
       performance={{ min: 0.5 }}
     >
       <Suspense fallback={null}>
