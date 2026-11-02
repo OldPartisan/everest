@@ -24,7 +24,7 @@ export default function About() {
         <div className="mt-14 grid gap-10 lg:mt-20 lg:grid-cols-12 lg:gap-12">
           <div className="grid gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-2 lg:col-span-8">
             {about.cards.map((card, index) => (
-              <Reveal key={card.id} delay={index * 0.06}>
+              <Reveal key={card.id} delay={index * 0.06} distance={0}>
                 <article className="group h-full bg-bg-0 p-6 transition-colors duration-500 hover:bg-bg-1 md:p-8">
                   <div className="mb-8 flex items-center justify-between">
                     <span className="mono-label">{card.label}</span>

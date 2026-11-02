@@ -96,7 +96,12 @@ export default function RouteExplorer() {
             </p>
           </div>
 
-          <div className="mt-5 flex gap-2 md:hidden" role="group" aria-label="Переключение карты и 3D">
+          <noscript>
+            <p className="mt-5 rounded border border-line bg-bg-1 px-4 py-3 text-xs leading-5 text-ink-1">
+              Интерактивная карта, 3D-модель и параллакс требуют JavaScript. Список лагерей и
+              текстовые описания ниже доступны без него.
+            </p>
+          </noscript><div className="mt-5 flex gap-2 md:hidden" role="group" aria-label="Переключение карты и 3D">
             <button
               type="button"
               aria-pressed={panel === 'map'}

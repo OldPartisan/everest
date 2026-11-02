@@ -25,7 +25,8 @@ export default function AnimatedNumber({
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, margin: '-12% 0px' });
   const reduced = useReducedMotion();
-  const [display, setDisplay] = useState(0);
+  // Start with the final value so the number is correct without JS / before hydration.
+  const [display, setDisplay] = useState(value);
 
   useEffect(() => {
     if (!inView) return;
@@ -34,6 +35,7 @@ export default function AnimatedNumber({
       return;
     }
 
+    setDisplay(0);
     let frame = 0;
     const start = performance.now();
     const tick = (now: number) => {

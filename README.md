@@ -204,6 +204,8 @@ python3 scripts/generate_model.py /path/N27E086.hgt /path/N28E086.hgt
 - 3D и Leaflet загружаются лениво при приближении к секции; на мобильных вкладка «3D-рельеф»
   открывается по умолчанию; при отсутствии WebGL показывается изображение с резервным описанием.
 - Есть fallback при отсутствии WebGL и error boundary для сцены.
+- Контент виден до гидратации и без JavaScript: `Reveal` не скрывает блоки полностью, числа
+  отрисованы в SSR; для карты/3D/параллакса добавлено `<noscript>`-пояснение.
 - `prefers-reduced-motion` отключает параллакс, счётчики и тяжёлые переходы.
 - Семантические `section`/`h1–h3`, skip-link, focus-visible, `aria-expanded`, `aria-pressed`,
   `aria-controls`, модальное окно с фокус-ловушкой и Escape.

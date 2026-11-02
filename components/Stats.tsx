@@ -1,5 +1,4 @@
 import AnimatedNumber from '@/components/ui/AnimatedNumber';
-import Reveal from '@/components/ui/Reveal';
 import { everestData } from '@/lib/data';
 import { cn } from '@/lib/format';
 
@@ -10,8 +9,7 @@ export default function Stats() {
         <h2 id="stats-title" className="sr-only">
           Эверест в цифрах
         </h2>
-        <Reveal>
-          <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-line bg-line shadow-lift lg:grid-cols-4">
+        <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-line bg-line shadow-lift lg:grid-cols-4">
             {everestData.stats.map((stat, index) => (
               <div
                 key={stat.id}
@@ -38,8 +36,7 @@ export default function Stats() {
                 </dd>
               </div>
             ))}
-          </dl>
-        </Reveal>
+        </dl>
       </div>
     </section>
   );
