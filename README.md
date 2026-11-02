@@ -216,7 +216,7 @@ Lighthouse на **живом GitHub Pages**:
 
 | Режим | Performance | Accessibility | Best Practices | SEO |
 | --- | ---: | ---: | ---: | ---: |
-| Mobile | **99** | **100** | 96 | **100** |
+| Mobile | **93** | **100** | 96 | **100** |
 | Desktop | **99** | **100** | **100** | **100** |
 
 - axe-core (WCAG 2.1 AA): **0** нарушений на 1440 и 360 px.
