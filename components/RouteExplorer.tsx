@@ -55,7 +55,7 @@ export default function RouteExplorer() {
     <section id="routes" aria-labelledby="routes-title" className="section bg-bg-0">
       <div className="shell">
         <SectionHeading
-          index="04"
+          index="05"
           eyebrow={everestData.routes.eyebrow}
           title={everestData.routes.title}
           lede={everestData.routes.intro}

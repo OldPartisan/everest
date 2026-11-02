@@ -8,6 +8,7 @@ export const SITE_DESCRIPTION =
 export const navItems = [
   { href: '#mountain', label: 'Гора' },
   { href: '#history', label: 'История' },
+  { href: '#people', label: 'Люди' },
   { href: '#routes', label: 'Маршруты' },
   { href: '#cost', label: 'Стоимость' },
   { href: '#gear', label: 'Снаряжение' },

@@ -46,7 +46,7 @@ export default function KnowledgeSection() {
     <section id="knowledge" aria-labelledby="knowledge-title" className="section bg-bg-0">
       <div className="shell">
         <SectionHeading
-          index="08"
+          index="09"
           eyebrow="Словарь и источники"
           title="Язык высоты. Архив фактов."
           lede="Короткий словарь, который помогает читать репортажи с горы, и открытый список источников — с оговорками, а не безоговорочными истинами."

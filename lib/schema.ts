@@ -2,6 +2,21 @@ import { z } from 'zod';
 
 const ConfidenceSchema = z.enum(['confirmed', 'disputed', 'unconfirmed']);
 
+const PersonSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  initials: z.string(),
+  years: z.string(),
+  role: z.string(),
+  country: z.string(),
+  route: z.string(),
+  bio: z.string(),
+  knownFor: z.string(),
+  note: z.string().optional(),
+  status: ConfidenceSchema.optional(),
+  sourceIds: z.array(z.string()),
+});
+
 const SourceRefSchema = z.object({
   id: z.string(),
   title: z.string(),
@@ -116,8 +131,16 @@ const CultureItemSchema = z.object({
   year: z.number(),
   kind: z.enum(['book', 'film']),
   coverWord: z.string(),
+  cover: z.string().optional(),
   description: z.string(),
   themes: z.array(z.string()),
+  runtime: z.string().optional(),
+  platform: z.string().optional(),
+  release: z.string().optional(),
+  cast: z.array(z.string()).optional(),
+  award: z.string().optional(),
+  featured: z.boolean().optional(),
+  url: z.string().url().optional(),
 });
 
 const SourceSchema = SourceRefSchema;
@@ -200,6 +223,7 @@ export const EverestDataSchema = z.object({
     }),
   ),
   history: z.array(HistoryItemSchema),
+  people: z.array(PersonSchema),
   routes: z.object({
     eyebrow: z.string(),
     title: z.string(),
@@ -259,6 +283,7 @@ export const EverestDataSchema = z.object({
 export type EverestData = z.infer<typeof EverestDataSchema>;
 export type Stat = z.infer<typeof StatSchema>;
 export type HistoryItem = z.infer<typeof HistoryItemSchema>;
+export type Person = z.infer<typeof PersonSchema>;
 export type Route = z.infer<typeof RouteSchema>;
 export type Camp = z.infer<typeof CampSchema>;
 export type CostRange = z.infer<typeof CostRangeSchema>;

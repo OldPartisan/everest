@@ -19,6 +19,24 @@ const culture = everestData.culture;
 
 function CultureCover({ item, compact = false }: { item: CultureItem; compact?: boolean }) {
   const isLongWord = item.coverWord.length >= 6;
+  if (item.cover) {
+    return (
+      <div
+        className={cn(
+          'relative overflow-hidden rounded border border-line bg-ink-0',
+          compact ? 'h-52 w-40 shrink-0' : 'aspect-[4/5] w-full',
+        )}
+      >
+        <Image
+          src={withBase(item.cover)}
+          alt={`Обложка: ${item.title}`}
+          fill
+          sizes={compact ? '160px' : '(min-width: 1024px) 292px, 264px'}
+          className="object-cover object-center transition-transform duration-700 ease-mountain group-hover:scale-[1.025]"
+        />
+      </div>
+    );
+  }
   return (
     <div
       className={cn(
@@ -249,6 +267,8 @@ export default function CultureSection() {
 
   useEffect(() => setMounted(true), []);
 
+  const featured = culture.films.find((film) => film.featured);
+
   const items = useMemo(() => {
     if (filter === 'book') return culture.books;
     if (filter === 'film') return culture.films;
@@ -276,7 +296,7 @@ export default function CultureSection() {
     <section id="culture" aria-labelledby="culture-title" className="section bg-bg-1">
       <div className="shell">
         <SectionHeading
-          index="07"
+          index="08"
           eyebrow={culture.eyebrow}
           title={culture.title}
           lede={culture.intro}
@@ -341,6 +361,74 @@ export default function CultureSection() {
             <CultureCard key={item.id} item={item} index={index} onOpen={setSelected} />
           ))}
         </div>
+
+        <p className="mt-4 text-[10px] leading-5 text-ink-1">
+          Обложки — авторская серия проекта, созданная для этого лонгрида, а не официальные
+          издательские обложки или постеры.
+        </p>
+
+        {featured && (
+          <Reveal className="mt-14 md:mt-20">
+            <article className="grid overflow-hidden rounded-lg border border-line bg-ink-0 text-white lg:grid-cols-[320px_1fr]">
+              <div className="relative aspect-[4/5] border-b border-white/10 lg:aspect-auto lg:min-h-[460px] lg:border-b-0 lg:border-r">
+                {featured.cover && (
+                  <Image
+                    src={withBase(featured.cover)}
+                    alt={`Обложка фильма «${featured.title}»`}
+                    fill
+                    sizes="(min-width: 1024px) 320px, 100vw"
+                    className="object-contain lg:object-contain"
+                  />
+                )}
+              </div>
+              <div className="p-6 md:p-9">
+                <p className="text-[10px] uppercase tracking-[0.18em] text-bg-2/60">
+                  {featured.platform} · {featured.release}
+                </p>
+                <h3 className="mt-4 font-display text-3xl font-semibold tracking-[-0.04em] md:text-4xl">
+                  {featured.title}
+                </h3>
+                <p className="mt-1 text-xs text-bg-2/60">{featured.originalTitle}</p>
+                <p className="mt-5 max-w-2xl text-sm leading-7 text-bg-2/85">{featured.description}</p>
+
+                <dl className="mt-7 grid gap-5 border-t border-white/15 pt-5 sm:grid-cols-2">
+                  <div>
+                    <dt className="text-[9px] uppercase tracking-[0.16em] text-bg-2/50">Режиссёр</dt>
+                    <dd className="mt-1 text-xs leading-5 text-bg-2">{featured.director}</dd>
+                  </div>
+                  <div>
+                    <dt className="text-[9px] uppercase tracking-[0.16em] text-bg-2/50">Хронометраж</dt>
+                    <dd className="mt-1 text-xs leading-5 text-bg-2">{featured.runtime}</dd>
+                  </div>
+                  <div className="sm:col-span-2">
+                    <dt className="text-[9px] uppercase tracking-[0.16em] text-bg-2/50">В ролях</dt>
+                    <dd className="mt-1 text-xs leading-6 text-bg-2">
+                      {featured.cast?.join(' · ')}
+                    </dd>
+                  </div>
+                  {featured.award && (
+                    <div className="sm:col-span-2">
+                      <dt className="text-[9px] uppercase tracking-[0.16em] text-bg-2/50">Награда</dt>
+                      <dd className="mt-1 text-xs leading-6 text-bg-2">{featured.award}</dd>
+                    </div>
+                  )}
+                </dl>
+
+                {featured.url && (
+                  <a
+                    href={featured.url}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="link-underline mt-6 text-xs font-medium text-white"
+                  >
+                    Страница фильма
+                    <ArrowUpRight size={13} strokeWidth={1.5} aria-hidden="true" />
+                  </a>
+                )}
+              </div>
+            </article>
+          </Reveal>
+        )}
 
         <Reveal className="mt-16 md:mt-24">
           <div className="grid overflow-hidden rounded-lg border border-line bg-bg-0 lg:grid-cols-12">

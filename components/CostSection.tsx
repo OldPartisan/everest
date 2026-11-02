@@ -17,7 +17,7 @@ export default function CostSection() {
     <section id="cost" aria-labelledby="cost-title" className="section bg-bg-1">
       <div className="shell">
         <SectionHeading
-          index="05"
+          index="06"
           eyebrow={cost.eyebrow}
           title={cost.title}
           lede={cost.intro}
@@ -45,10 +45,10 @@ export default function CostSection() {
                 <p className="text-[10px] uppercase tracking-[0.18em] text-bg-2/70">
                   {cost.total.label}
                 </p>
-                <p className="mt-8 flex flex-nowrap items-baseline gap-2 font-display text-[clamp(1.55rem,3.4vw,3rem)] font-semibold leading-none tracking-[-0.06em]">
-                  {formatMoney(cost.total.min)}
+                <p className="mt-8 flex flex-wrap items-baseline gap-x-2 gap-y-1 font-display text-[clamp(1.6rem,2.7vw,2.6rem)] font-semibold leading-tight tracking-[-0.06em]">
+                  <span className="whitespace-nowrap">{formatMoney(cost.total.min)}</span>
                   <span className="text-bg-2/50">—</span>
-                  {formatMoney(cost.total.max)}
+                  <span className="whitespace-nowrap">{formatMoney(cost.total.max)}</span>
                 </p>
                 <p className="mt-6 max-w-sm text-sm leading-7 text-bg-2/80">{cost.total.note}</p>
               </div>

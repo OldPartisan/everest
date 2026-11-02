@@ -11,7 +11,7 @@ export default function GearSection() {
     <section id="gear" aria-labelledby="gear-title" className="section bg-bg-0">
       <div className="shell">
         <SectionHeading
-          index="06"
+          index="07"
           eyebrow={gear.eyebrow}
           title={gear.title}
           lede={gear.intro}
