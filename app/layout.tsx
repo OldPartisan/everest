@@ -161,7 +161,7 @@ export default function RootLayout({
         <link
           rel="preload"
           as="image"
-          href={withBase('/images/hero-everest-1200.avif')}
+          href={withBase('/images/hero-everest-960.avif')}
           media="(max-width: 767px)"
           fetchPriority="high"
         />

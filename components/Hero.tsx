@@ -136,7 +136,7 @@ export default function Hero() {
         style={
           {
             '--hero-desktop': `url("${withBase('/images/hero-everest-1800.avif')}")`,
-            '--hero-mobile': `url("${withBase('/images/hero-everest-1200.avif')}")`,
+            '--hero-mobile': `url("${withBase('/images/hero-everest-960.avif')}")`,
           } as CSSProperties
         }
       />
