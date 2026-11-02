@@ -145,7 +145,8 @@ GitHub Pages отдаёт только статические файлы, поэ
 │   └── preview.mjs          # локальный preview с /everest
 ├── docs/
 │   ├── research.md
-│   └── github-actions-deploy.yml
+│   ├── github-actions-deploy.yml
+│   └── preview.webp
 ├── next.config.js
 ├── tailwind.config.ts
 ├── package.json
