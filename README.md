@@ -141,9 +141,9 @@ GitHub Pages отдаёт только статические файлы, поэ
 ├── scripts/
 │   ├── generate_model.py    # SRTM → компактный GLB
 │   └── preview.mjs          # локальный preview с /everest
-├── docs/research.md         # исследовательские заметки и факт-чек
-├── .github/
-│   └── (workflow-шаблон: docs/github-actions-deploy.yml)
+├── docs/
+│   ├── research.md
+│   └── github-actions-deploy.yml
 ├── next.config.js
 ├── tailwind.config.ts
 ├── package.json
@@ -206,14 +206,19 @@ python3 scripts/generate_model.py /path/N27E086.hgt /path/N28E086.hgt
 
 ## Аудит
 
-Локальная production-сборка, gzip-preview:
+Lighthouse на **живом GitHub Pages**:
 
-- Lighthouse **desktop**: Performance **99**, Accessibility **100**, Best Practices **100**, SEO **100**.
+| Режим | Performance | Accessibility | Best Practices | SEO |
+| --- | ---: | ---: | ---: | ---: |
+| Mobile | **99** | **100** | 96 | **100** |
+| Desktop | **99** | **100** | **100** | **100** |
+
 - axe-core (WCAG 2.1 AA): **0** нарушений на 1440 и 360 px.
 - Горизонтальный скролл: 360 / 390 / 768 / 1024 / 1440 px — без переполнения.
 - Проверены маршруты, переключение карты/3D, модальные окна, меню, reduced-motion, 404.
+- Mobile Best Practices 96 — единственное замечание Lighthouse касается размера мелких
+  uppercase-подписей (декоративная типографика), не ошибка доступности.
 
-Мобильный Lighthouse может колебаться из-за симуляции медленной сети и ленивой 3D-сцены;
 3D и карта намеренно не входят в критический путь первой отрисовки.
 
 ## Деплой на GitHub Pages
