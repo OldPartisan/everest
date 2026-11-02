@@ -408,7 +408,13 @@
         "hdb",
         "wikipedia",
         "ng"
-      ]
+      ],
+      "photo": "/images/people/mallory.webp",
+      "photoAlt": "George Mallory, 1915",
+      "photoCredit": "Unknown author, 1915",
+      "photoLicense": "Public domain",
+      "photoUrl": "https://commons.wikimedia.org/wiki/File:George_Mallory_1915.jpg",
+      "photoPosition": "50% 18%"
     },
     {
       "id": "irvine",
@@ -426,7 +432,13 @@
         "ng",
         "bbc",
         "hdb"
-      ]
+      ],
+      "photo": "/images/people/irvine.webp",
+      "photoAlt": "Эндрю Ирвин",
+      "photoCredit": "Unknown photographer",
+      "photoLicense": "Public domain",
+      "photoUrl": "https://commons.wikimedia.org/wiki/File:AndrewIrvine.jpg",
+      "photoPosition": "50% 20%"
     },
     {
       "id": "hillary",
@@ -443,7 +455,13 @@
         "rgs",
         "hdb",
         "wikipedia"
-      ]
+      ],
+      "photo": "/images/people/hillary.webp",
+      "photoAlt": "Эдмунд Хиллари, около 1953 года",
+      "photoCredit": "Unknown photographer, c. 1953",
+      "photoLicense": "Public domain",
+      "photoUrl": "https://commons.wikimedia.org/wiki/File:Edmund_Hillary,_c._1953,_autograph_removed.jpg",
+      "photoPosition": "50% 22%"
     },
     {
       "id": "tenzing",
@@ -461,7 +479,13 @@
         "rgs",
         "hdb",
         "wikipedia"
-      ]
+      ],
+      "photo": "/images/people/tenzing.webp",
+      "photoAlt": "Тенцинг Норгей",
+      "photoCredit": "SAS Scandinavian Airlines",
+      "photoLicense": "Public domain",
+      "photoUrl": "https://commons.wikimedia.org/wiki/File:Tenzing_Norgay_(cropped).jpg",
+      "photoPosition": "50% 22%"
     },
     {
       "id": "hunt",
@@ -478,7 +502,13 @@
         "rgs",
         "hdb",
         "wikipedia"
-      ]
+      ],
+      "photo": "/images/people/hunt.webp",
+      "photoAlt": "Джон Хант в кругу львовских альпинистов, 1958",
+      "photoCredit": "Bogdan Kosar, 1958",
+      "photoLicense": "CC BY-SA 4.0",
+      "photoUrl": "https://commons.wikimedia.org/wiki/File:Sir_John_Hunt_in_the_Caucasus._1958.jpg",
+      "photoPosition": "50% 36%"
     },
     {
       "id": "messner",
@@ -494,7 +524,13 @@
       "sourceIds": [
         "hdb",
         "wikipedia"
-      ]
+      ],
+      "photo": "/images/people/messner.webp",
+      "photoAlt": "Райнхольд Месснер, 2017",
+      "photoCredit": "Ptolusque, 2017",
+      "photoLicense": "CC BY-SA 4.0",
+      "photoUrl": "https://commons.wikimedia.org/wiki/File:Reinhold_Messner_at_Frankfurt_Book_Fair_2017_(26)_(cropped).jpg",
+      "photoPosition": "50% 25%"
     },
     {
       "id": "wielicki",
@@ -510,7 +546,13 @@
       "sourceIds": [
         "hdb",
         "wikipedia"
-      ]
+      ],
+      "photo": "/images/people/wielicki.webp",
+      "photoAlt": "Кшиштоф Велицкий, 2018",
+      "photoCredit": "Ralf Lotys (Sicherlich), 2018",
+      "photoLicense": "CC BY 4.0",
+      "photoUrl": "https://commons.wikimedia.org/wiki/File:2018_-_Pol’and’Rock_Festival_-_Krzysztof_Wielicki_02.jpg",
+      "photoPosition": "50% 20%"
     },
     {
       "id": "boukreev",
@@ -526,7 +568,13 @@
       "sourceIds": [
         "hdb",
         "boukreev"
-      ]
+      ],
+      "photo": "/images/people/boukreev.webp",
+      "photoAlt": "Анатолий Букреев, 1991",
+      "photoCredit": "Jaan Künnap, 1991",
+      "photoLicense": "CC BY-SA 4.0",
+      "photoUrl": "https://commons.wikimedia.org/wiki/File:Anatoli_Bukrejev_Kasahstani_alpinist_1991.jpg",
+      "photoPosition": "50% 22%"
     },
     {
       "id": "apa",
@@ -542,7 +590,13 @@
       "sourceIds": [
         "hdb",
         "wikipedia"
-      ]
+      ],
+      "photo": "/images/people/apa.webp",
+      "photoAlt": "Апа Шерпа",
+      "photoCredit": "Mogens Engelund",
+      "photoLicense": "CC BY-SA 3.0",
+      "photoUrl": "https://commons.wikimedia.org/wiki/File:Apa_Sherpa.jpg",
+      "photoPosition": "50% 28%"
     },
     {
       "id": "kami-rita",
@@ -558,7 +612,13 @@
       "sourceIds": [
         "hdb",
         "wikipedia"
-      ]
+      ],
+      "photo": "/images/people/kami-rita.webp",
+      "photoAlt": "Ками Рита Шерпа на вершине, 2010",
+      "photoCredit": "Vlvescovo, 2010",
+      "photoLicense": "CC BY-SA 4.0",
+      "photoUrl": "https://commons.wikimedia.org/wiki/File:Kami_Rita_Sherpa_Mt_Everest_Summit_May_2010.jpg",
+      "photoPosition": "50% 32%"
     }
   ],
   "routes": {
@@ -1237,6 +1297,35 @@
     ],
     "films": [
       {
+        "id": "tenzing",
+        "title": "Tenzing",
+        "originalTitle": "Tenzing",
+        "director": "Дженнифер Пидом",
+        "year": 2026,
+        "kind": "film",
+        "coverWord": "TENZING",
+        "description": "Биографическая драма Дженнифер Пидом о Тенцинге Норгее и восхождении 1953 года. В центре — шерпская перспектива, а не только Хиллари. Премьера: Telluride 4 сентября 2026, в кино США 9 октября, на Apple TV+ 16 октября 2026.",
+        "themes": [
+          "Тенцинг",
+          "1953",
+          "Apple TV+"
+        ],
+        "cover": "/images/covers/tenzing.webp",
+        "runtime": "125 мин",
+        "platform": "Apple TV+",
+        "release": "16 октября 2026",
+        "cast": [
+          "Генден Пхунцок",
+          "Том Хиддлстон",
+          "Уиллем Дефо",
+          "Кейтриона Балф",
+          "Тензин Далха",
+          "Джонни Флинн"
+        ],
+        "award": "Приз зрительских симпатий Mill Valley Film Festival 2026",
+        "url": "https://en.wikipedia.org/wiki/Tenzing_(film)"
+      },
+      {
         "id": "beyond-the-edge",
         "title": "Beyond the Edge",
         "originalTitle": "Beyond the Edge",
@@ -1315,36 +1404,6 @@
           "рекорд"
         ],
         "cover": "/images/covers/14-peaks.webp"
-      },
-      {
-        "id": "tenzing",
-        "title": "Tenzing",
-        "originalTitle": "Tenzing",
-        "director": "Дженнифер Пидом",
-        "year": 2026,
-        "kind": "film",
-        "coverWord": "TENZING",
-        "description": "Биографическая драма Дженнифер Пидом о Тенцинге Норгее и восхождении 1953 года. В центре — шерпская перспектива, а не только Хиллари. Премьера: Telluride 4 сентября 2026, в кино США 9 октября, на Apple TV+ 16 октября 2026.",
-        "themes": [
-          "Тенцинг",
-          "1953",
-          "Apple TV+"
-        ],
-        "cover": "/images/covers/tenzing.webp",
-        "runtime": "125 мин",
-        "platform": "Apple TV+",
-        "release": "16 октября 2026",
-        "cast": [
-          "Генден Пхунцок",
-          "Том Хиддлстон",
-          "Уиллем Дефо",
-          "Кейтриона Балф",
-          "Тензин Далха",
-          "Джонни Флинн"
-        ],
-        "award": "Приз зрительских симпатий Mill Valley Film Festival 2026",
-        "featured": true,
-        "url": "https://en.wikipedia.org/wiki/Tenzing_(film)"
       },
       {
         "id": "sherpa",

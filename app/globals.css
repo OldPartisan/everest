@@ -151,6 +151,7 @@ img {
   .number-display {
     @apply font-display font-semibold leading-none tracking-[-0.055em] text-ink-0;
     font-variant-numeric: tabular-nums lining-nums;
+    white-space: nowrap;
   }
 
   .prose-muted {
@@ -338,32 +339,6 @@ img {
     inset: 0;
     background: linear-gradient(180deg, transparent 45%, rgba(30, 41, 59, 0.1));
     pointer-events: none;
-  }
-
-  .culture-rail {
-    scrollbar-width: none;
-    scroll-snap-type: x mandatory;
-    scroll-padding-left: 24px;
-  }
-
-  .culture-rail::-webkit-scrollbar {
-    display: none;
-  }
-
-  @media (min-width: 768px) {
-    .culture-rail {
-      scroll-padding-left: 40px;
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .culture-rail {
-      scroll-padding-left: 48px;
-    }
-  }
-
-  .culture-slide {
-    scroll-snap-align: start;
   }
 
   .gear-tooltip {

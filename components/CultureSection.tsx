@@ -1,7 +1,7 @@
 'use client';
 
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import { ArrowLeft, ArrowRight, ArrowUpRight, BookOpen, Film, X } from 'lucide-react';
+import { BookOpen, Film, X } from 'lucide-react';
 import Image from 'next/image';
 import { useEffect, useMemo, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react';
 import { createPortal } from 'react-dom';
@@ -101,7 +101,7 @@ function CultureCard({
   return (
     <button
       type="button"
-      className="culture-slide tilt-card group flex w-[264px] shrink-0 flex-col text-left sm:w-[292px]"
+      className="tilt-card group flex h-full w-full flex-col text-left"
       onPointerMove={onPointerMove}
       onPointerLeave={(event) => reset(event.currentTarget)}
       onBlur={(event) => reset(event.currentTarget)}
@@ -120,6 +120,11 @@ function CultureCard({
           </span>
         </div>
         <p className="mt-1 text-[11px] text-ink-1">{item.originalTitle}</p>
+        {item.platform && (
+          <p className="mt-1 text-[10px] leading-5 text-accent">
+            {item.year} · {item.platform} · {item.runtime}
+          </p>
+        )}
         <div className="mt-4 flex flex-wrap gap-1.5">
           {item.themes.slice(0, 2).map((theme) => (
             <span
@@ -241,6 +246,52 @@ function CultureModal({ item, onClose }: { item: CultureItem; onClose: () => voi
 
             <p className="mt-5 text-sm leading-7 text-ink-1">{item.description}</p>
 
+            {(item.platform || item.cast || item.award) && (
+              <dl className="mt-5 space-y-3 border-t border-line pt-4 text-xs leading-5">
+                {item.platform && (
+                  <div className="flex gap-3">
+                    <dt className="w-24 shrink-0 text-[9px] uppercase tracking-[0.12em] text-accent">Платформа</dt>
+                    <dd className="text-ink-0">{item.platform}</dd>
+                  </div>
+                )}
+                {item.release && (
+                  <div className="flex gap-3">
+                    <dt className="w-24 shrink-0 text-[9px] uppercase tracking-[0.12em] text-accent">Премьера</dt>
+                    <dd className="text-ink-0">{item.release}</dd>
+                  </div>
+                )}
+                {item.runtime && (
+                  <div className="flex gap-3">
+                    <dt className="w-24 shrink-0 text-[9px] uppercase tracking-[0.12em] text-accent">Время</dt>
+                    <dd className="text-ink-0">{item.runtime}</dd>
+                  </div>
+                )}
+                {item.cast && (
+                  <div className="flex gap-3">
+                    <dt className="w-24 shrink-0 text-[9px] uppercase tracking-[0.12em] text-accent">В ролях</dt>
+                    <dd className="text-ink-0">{item.cast.join(' · ')}</dd>
+                  </div>
+                )}
+                {item.award && (
+                  <div className="flex gap-3">
+                    <dt className="w-24 shrink-0 text-[9px] uppercase tracking-[0.12em] text-accent">Награда</dt>
+                    <dd className="text-ink-0">{item.award}</dd>
+                  </div>
+                )}
+              </dl>
+            )}
+
+            {item.url && (
+              <a
+                href={item.url}
+                target="_blank"
+                rel="noreferrer noopener"
+                className="mt-5 inline-flex items-center gap-1 text-[10px] uppercase tracking-[0.12em] text-accent transition-colors hover:text-ink-0"
+              >
+                Страница фильма ↗
+              </a>
+            )}
+
             <div className="mt-6 flex flex-wrap gap-2">
               {item.themes.map((theme) => (
                 <span
@@ -259,32 +310,17 @@ function CultureModal({ item, onClose }: { item: CultureItem; onClose: () => voi
 }
 
 export default function CultureSection() {
-  const rail = useRef<HTMLDivElement>(null);
   const [filter, setFilter] = useState<Filter>('all');
   const [selected, setSelected] = useState<CultureItem | null>(null);
   const [mounted, setMounted] = useState(false);
-  const reduced = useReducedMotion();
 
   useEffect(() => setMounted(true), []);
-
-  const featured = culture.films.find((film) => film.featured);
 
   const items = useMemo(() => {
     if (filter === 'book') return culture.books;
     if (filter === 'film') return culture.films;
     return [...culture.books, ...culture.films];
   }, [filter]);
-
-  const scroll = (direction: 1 | -1) => {
-    const node = rail.current;
-    if (!node) return;
-    node.scrollBy({ left: direction * Math.min(node.clientWidth * 0.82, 620), behavior: reduced ? 'auto' : 'smooth' });
-  };
-
-  const changeFilter = (next: Filter) => {
-    setFilter(next);
-    rail.current?.scrollTo({ left: 0, behavior: 'auto' });
-  };
 
   const filters: Array<{ id: Filter; label: string; icon: typeof BookOpen }> = [
     { id: 'all', label: `Все · ${culture.books.length + culture.films.length}`, icon: BookOpen },
@@ -312,7 +348,7 @@ export default function CultureSection() {
                   key={item.id}
                   type="button"
                   aria-pressed={filter === item.id}
-                  onClick={() => changeFilter(item.id)}
+                  onClick={() => setFilter(item.id)}
                   className={cn(
                     'inline-flex shrink-0 items-center gap-2 rounded border px-3.5 py-2 text-[10px] font-medium uppercase tracking-[0.12em] transition-colors',
                     filter === item.id
@@ -326,155 +362,28 @@ export default function CultureSection() {
               );
             })}
           </div>
-
-          <div className="flex items-center gap-2">
-            <span className="mr-2 text-[9px] uppercase tracking-[0.16em] text-accent">
-              листайте
-            </span>
-            <button
-              type="button"
-              onClick={() => scroll(-1)}
-              className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-line bg-bg-0 text-ink-1 transition-colors hover:border-ink-0 hover:text-ink-0"
-              aria-label="Прокрутить назад"
-            >
-              <ArrowLeft size={14} strokeWidth={1.5} />
-            </button>
-            <button
-              type="button"
-              onClick={() => scroll(1)}
-              className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-line bg-bg-0 text-ink-1 transition-colors hover:border-ink-0 hover:text-ink-0"
-              aria-label="Прокрутить вперёд"
-            >
-              <ArrowRight size={14} strokeWidth={1.5} />
-            </button>
-          </div>
+          <p className="text-[10px] uppercase tracking-[0.14em] text-accent" aria-live="polite">
+            {items.length} материалов
+          </p>
         </div>
 
-        <div
-          ref={rail}
-          className="culture-rail -mx-6 mt-7 flex gap-5 overflow-x-auto px-6 pb-3 md:-mx-10 md:px-10 lg:-mx-12 lg:px-12"
-          role="region"
-          aria-label="Карусель книг и фильмов"
-          tabIndex={0}
-        >
+        <div className="mt-8 grid gap-x-5 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {items.map((item, index) => (
             <CultureCard key={item.id} item={item} index={index} onOpen={setSelected} />
           ))}
         </div>
 
-        <p className="mt-4 text-[10px] leading-5 text-ink-1">
+        <p className="mt-8 text-[10px] leading-5 text-ink-1">
           Обложки — авторская серия проекта, созданная для этого лонгрида, а не официальные
           издательские обложки или постеры.
         </p>
-
-        {featured && (
-          <Reveal className="mt-14 md:mt-20">
-            <article className="grid overflow-hidden rounded-lg border border-line bg-ink-0 text-white lg:grid-cols-[320px_1fr]">
-              <div className="relative aspect-[4/5] border-b border-white/10 lg:aspect-auto lg:min-h-[460px] lg:border-b-0 lg:border-r">
-                {featured.cover && (
-                  <Image
-                    src={withBase(featured.cover)}
-                    alt={`Обложка фильма «${featured.title}»`}
-                    fill
-                    sizes="(min-width: 1024px) 320px, 100vw"
-                    className="object-contain lg:object-contain"
-                  />
-                )}
-              </div>
-              <div className="p-6 md:p-9">
-                <p className="text-[10px] uppercase tracking-[0.18em] text-bg-2/60">
-                  {featured.platform} · {featured.release}
-                </p>
-                <h3 className="mt-4 font-display text-3xl font-semibold tracking-[-0.04em] md:text-4xl">
-                  {featured.title}
-                </h3>
-                <p className="mt-1 text-xs text-bg-2/60">{featured.originalTitle}</p>
-                <p className="mt-5 max-w-2xl text-sm leading-7 text-bg-2/85">{featured.description}</p>
-
-                <dl className="mt-7 grid gap-5 border-t border-white/15 pt-5 sm:grid-cols-2">
-                  <div>
-                    <dt className="text-[9px] uppercase tracking-[0.16em] text-bg-2/50">Режиссёр</dt>
-                    <dd className="mt-1 text-xs leading-5 text-bg-2">{featured.director}</dd>
-                  </div>
-                  <div>
-                    <dt className="text-[9px] uppercase tracking-[0.16em] text-bg-2/50">Хронометраж</dt>
-                    <dd className="mt-1 text-xs leading-5 text-bg-2">{featured.runtime}</dd>
-                  </div>
-                  <div className="sm:col-span-2">
-                    <dt className="text-[9px] uppercase tracking-[0.16em] text-bg-2/50">В ролях</dt>
-                    <dd className="mt-1 text-xs leading-6 text-bg-2">
-                      {featured.cast?.join(' · ')}
-                    </dd>
-                  </div>
-                  {featured.award && (
-                    <div className="sm:col-span-2">
-                      <dt className="text-[9px] uppercase tracking-[0.16em] text-bg-2/50">Награда</dt>
-                      <dd className="mt-1 text-xs leading-6 text-bg-2">{featured.award}</dd>
-                    </div>
-                  )}
-                </dl>
-
-                {featured.url && (
-                  <a
-                    href={featured.url}
-                    target="_blank"
-                    rel="noreferrer noopener"
-                    className="link-underline mt-6 text-xs font-medium text-white"
-                  >
-                    Страница фильма
-                    <ArrowUpRight size={13} strokeWidth={1.5} aria-hidden="true" />
-                  </a>
-                )}
-              </div>
-            </article>
-          </Reveal>
-        )}
-
-        <Reveal className="mt-16 md:mt-24">
-          <div className="grid overflow-hidden rounded-lg border border-line bg-bg-0 lg:grid-cols-12">
-            <div className="relative min-h-[320px] lg:col-span-5">
-              <Image
-                src={withBase('/images/khumbu-glacier.avif')}
-                alt="Ледник Кхумбу и западная стена массива Эвереста, вид с запада"
-                fill
-                sizes="(min-width: 1024px) 42vw, 100vw"
-                className="object-cover grayscale"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-ink-0/60 via-transparent to-transparent" aria-hidden="true" />
-              <p className="absolute bottom-5 left-5 right-5 text-[9px] uppercase tracking-[0.16em] text-white/80">
-                Кхумбу · место работы и дом
-              </p>
-            </div>
-            <div className="p-6 md:p-9 lg:col-span-7">
-              <p className="eyebrow">Культура шерпов</p>
-              <h3 className="mt-4 font-display text-2xl font-semibold leading-tight tracking-[-0.03em] text-ink-0 md:text-3xl">
-                {culture.sherpa.title}
-              </h3>
-              <p className="mt-4 text-sm leading-7 text-ink-1">{culture.sherpa.text}</p>
-              <ul className="mt-6 space-y-3 border-t border-line pt-5">
-                {culture.sherpa.facts.map((fact) => (
-                  <li key={fact} className="flex gap-3 text-xs leading-6 text-ink-1">
-                    <span className="mt-2.5 h-1 w-1 shrink-0 rounded-full bg-accent" aria-hidden="true" />
-                    {fact}
-                  </li>
-                ))}
-              </ul>
-              <a
-                href="#knowledge"
-                className="link-underline mt-7 text-xs font-medium"
-              >
-                Источники и оговорки
-                <ArrowUpRight size={13} strokeWidth={1.5} aria-hidden="true" />
-              </a>
-            </div>
-          </div>
-        </Reveal>
       </div>
 
       {mounted &&
+        selected &&
         createPortal(
           <AnimatePresence>
-            {selected && <CultureModal item={selected} onClose={() => setSelected(null)} />}
+            <CultureModal item={selected} onClose={() => setSelected(null)} />
           </AnimatePresence>,
           document.body,
         )}

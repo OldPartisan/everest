@@ -15,6 +15,7 @@ export default function Stats() {
                 key={stat.id}
                 className={cn(
                   'group bg-bg-0 p-5 transition-colors duration-500 hover:bg-bg-1 sm:p-6 md:p-8',
+                  index === 0 && 'col-span-2 sm:col-span-1',
                   index === 3 && 'col-span-2 lg:col-span-1',
                 )}
               >
@@ -24,7 +25,7 @@ export default function Stats() {
                   <span>{stat.label}</span>
                 </dt>
                 <dd>
-                  <span className="number-display text-[clamp(1.8rem,2.8vw,2.9rem)]">
+                  <span className="number-display text-[clamp(1.55rem,2.4vw,2.5rem)]">
                     <AnimatedNumber
                       value={stat.value}
                       decimals={stat.decimals}
