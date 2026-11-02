@@ -177,6 +177,12 @@ export default function RootLayout({
         <a className="skip-link" href="#main">
           Перейти к содержанию
         </a>
+        <noscript>
+          <div className="fixed inset-x-0 bottom-0 z-[90] border-t border-white/15 bg-ink-0 px-5 py-3 text-center text-xs leading-5 text-bg-2">
+            Для интерактивной 3D-модели, карты и параллакса нужен JavaScript. Текст, таблицы и
+            источники доступны без него.
+          </div>
+        </noscript>
         <SiteHeader />
         <main id="main" tabIndex={-1}>
           {children}
