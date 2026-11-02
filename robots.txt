@@ -1,0 +1,5 @@
+User-Agent: *
+Allow: /
+
+Host: https://oldpartisan.github.io
+Sitemap: https://oldpartisan.github.io/everest/sitemap.xml
