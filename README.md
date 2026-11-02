@@ -7,6 +7,8 @@
 **Публичный URL:** [https://oldpartisan.github.io/everest](https://oldpartisan.github.io/everest)
 **Репозиторий:** [github.com/oldpartisan/everest](https://github.com/oldpartisan/everest)
 
+![Превью сайта: Эверест](docs/preview.webp)
+
 ---
 
 ## Стек

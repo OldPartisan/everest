@@ -1,3 +1,4 @@
+# Template: copy to .github/workflows/deploy.yml in a repo/token with workflow scope.
 name: Deploy to GitHub Pages
 
 on:
