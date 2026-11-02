@@ -337,7 +337,7 @@ export default function RouteExplorer() {
                     <span className="text-[9px] uppercase tracking-[0.14em] text-accent">
                       {item.label}
                     </span>
-                    <span className="text-[8px] uppercase tracking-[0.12em] text-ink-2">
+                    <span className="text-[8px] uppercase tracking-[0.12em] text-accent">
                       {item.status}
                     </span>
                   </div>

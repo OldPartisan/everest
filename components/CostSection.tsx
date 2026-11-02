@@ -76,7 +76,7 @@ export default function CostSection() {
                         {item.label}
                       </h3>
                     </div>
-                    <span className="font-display text-[10px] font-semibold tracking-[0.14em] text-line">
+                    <span className="font-display text-[10px] font-semibold tracking-[0.14em] text-accent">
                       0{index + 1}
                     </span>
                   </div>

@@ -106,6 +106,7 @@ def main(paths: list[str]) -> None:
     vertical_scale = MODEL_HEIGHT / (max_elev - BASE_ELEV)
     positions: list[float] = []
     colors: list[float] = []
+    terrain_y: list[float] = []
     for index, (x, _elevation, z) in enumerate(points):
         elevation = elevations[index]
         y = max(0.0, (elevation - BASE_ELEV) * vertical_scale)
@@ -115,6 +116,7 @@ def main(paths: list[str]) -> None:
         taper = min(1.0, edge / 12.0)
         taper = taper * taper * (3.0 - 2.0 * taper)
         y *= taper
+        terrain_y.append(y)
         positions.extend((x, y, z))
 
         # Cool grey palette: snow on high, wind-scoured rock below.
@@ -122,11 +124,11 @@ def main(paths: list[str]) -> None:
         snow_line = 0.63 + 0.04 * n
         normalized = y / MODEL_HEIGHT
         if normalized > snow_line:
-            shade = 0.74 + 0.1 * n
-            r, g, b = shade, shade + 0.012, shade + 0.03
+            shade = 0.90 + 0.07 * n
+            r, g, b = shade, shade + 0.012, shade + 0.035
         else:
-            shade = 0.34 + 0.2 * normalized + 0.06 * n
-            r, g, b = shade, shade + 0.02, shade + 0.045
+            shade = 0.27 + 0.2 * normalized + 0.06 * n
+            r, g, b = shade, shade + 0.022, shade + 0.05
         # Slightly darken the lower valleys for depth.
         depth = max(0.0, 1.0 - normalized * 2.2)
         r, g, b = r - depth * 0.06, g - depth * 0.05, b - depth * 0.02
@@ -269,6 +271,25 @@ def main(paths: list[str]) -> None:
     )
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_bytes(glb)
+    heightmap_path = OUT.parent / 'terrain-heightmap.json'
+    heightmap_path.write_text(
+        json.dumps(
+            {
+                'width': GRID_X,
+                'height': GRID_Z,
+                'west': WEST,
+                'east': EAST,
+                'south': SOUTH,
+                'north': NORTH,
+                'ys': [round(value, 4) for value in terrain_y],
+            },
+            separators=(',', ':'),
+        ),
+        encoding='utf-8',
+    )
+    print(
+        f'heightmap {heightmap_path}: {heightmap_path.stat().st_size / 1024:.0f} KB'
+    )
     print(
         f'{OUT}: {len(glb) / 1024:.0f} KB, {len(points)} vertices, '
         f'{len(indices) // 3} triangles, max elevation {max_elev:.0f} m'

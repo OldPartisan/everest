@@ -434,8 +434,8 @@ img {
   }
 }
 
-/* Leaflet: a quiet, monochrome base map. */
-.everest-map .leaflet-container {
+/* MapLibre + OpenStreetMap: a quiet, monochrome base map. */
+.everest-map .maplibregl-map {
   height: 100%;
   width: 100%;
   background: var(--bg-1);
@@ -443,57 +443,50 @@ img {
   outline: none;
 }
 
-.everest-map .leaflet-tile-pane {
-  filter: grayscale(1) contrast(0.86) brightness(1.08);
+.everest-map .maplibregl-canvas {
+  filter: grayscale(1) contrast(0.92) brightness(1.04);
 }
 
-.everest-map .leaflet-control-attribution {
-  background: rgba(255, 255, 255, 0.82) !important;
+.everest-map .maplibregl-ctrl-attrib {
+  background: rgba(255, 255, 255, 0.86) !important;
   color: var(--ink-1) !important;
   font-size: 9px !important;
   padding: 3px 6px !important;
+  border-radius: 4px;
 }
 
-.everest-map .leaflet-control-attribution a {
+.everest-map .maplibregl-ctrl-attrib a {
   color: var(--ink-0) !important;
 }
 
-.everest-map .leaflet-bar {
+.everest-map .maplibregl-ctrl-group {
   border: 1px solid var(--line) !important;
   border-radius: 4px !important;
   overflow: hidden;
   box-shadow: 0 8px 24px rgba(30, 41, 59, 0.08) !important;
 }
 
-.everest-map .leaflet-bar a {
+.everest-map .maplibregl-ctrl-group button {
   background: var(--bg-0) !important;
-  color: var(--ink-0) !important;
   border-bottom-color: var(--line) !important;
 }
 
-.everest-map .leaflet-bar a:hover {
+.everest-map .maplibregl-ctrl-group button:hover {
   background: var(--bg-1) !important;
 }
 
-.everest-map .leaflet-popup-content-wrapper {
-  border-radius: 6px;
-  border: 1px solid var(--line);
-  box-shadow: 0 8px 24px rgba(30, 41, 59, 0.1);
-  color: var(--ink-0);
-}
-
-.everest-map .leaflet-popup-tip {
-  background: var(--bg-0);
-}
-
-.everest-map .leaflet-control-zoom {
-  margin-right: 14px !important;
-  margin-bottom: 24px !important;
+.everest-map .maplibregl-ctrl-bottom-right {
+  margin: 0 14px 24px 0;
 }
 
 .camp-pin {
+  display: block;
+  width: 28px;
+  height: 28px;
+  padding: 0;
   background: transparent;
   border: 0;
+  cursor: pointer;
 }
 
 .camp-pin__marker {

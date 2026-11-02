@@ -10,36 +10,62 @@ import {
   MeshStandardMaterial,
   Vector3,
   type Group,
+  type Points as ThreePoints,
 } from 'three';
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
 
+import heightmapData from '@/public/models/terrain-heightmap.json';
 import type { Camp, Route } from '@/lib/schema';
 import { formatAltitude } from '@/lib/format';
 import { withBase } from '@/lib/withBase';
 
-const CENTER_LAT = 27.995;
-const CENTER_LNG = 86.92;
+const WEST = heightmapData.west;
+const EAST = heightmapData.east;
+const SOUTH = heightmapData.south;
+const NORTH = heightmapData.north;
+const HEIGHT_WIDTH = heightmapData.width;
+const HEIGHT_HEIGHT = heightmapData.height;
+const HEIGHT_VALUES = heightmapData.ys;
+const CENTER_LAT = (SOUTH + NORTH) / 2;
+const CENTER_LNG = (WEST + EAST) / 2;
 const MODEL_SIZE = 4.2;
-const MODEL_HEIGHT = 1.8;
-const BASE_ELEVATION = 5000;
-const PEAK_ELEVATION = 8848.86;
 const METERS_PER_DEG_LAT = 111_320;
 const METERS_PER_DEG_LNG = 111_320 * Math.cos((CENTER_LAT * Math.PI) / 180);
 const WORLD_WIDTH = (87.105 - 86.735) * METERS_PER_DEG_LNG;
 const WORLD_DEPTH = (28.16 - 27.83) * METERS_PER_DEG_LAT;
 const HORIZONTAL_SCALE = MODEL_SIZE / Math.max(WORLD_WIDTH, WORLD_DEPTH);
 
-function project(lat: number, lng: number, altitude: number): Vector3 {
+function sampleTerrainHeight(lat: number, lng: number): number {
+  const u = Math.max(0, Math.min(1, (lng - WEST) / (EAST - WEST))) * (HEIGHT_WIDTH - 1);
+  const v = Math.max(0, Math.min(1, (NORTH - lat) / (NORTH - SOUTH))) * (HEIGHT_HEIGHT - 1);
+  const x0 = Math.floor(u);
+  const z0 = Math.floor(v);
+  const x1 = Math.min(HEIGHT_WIDTH - 1, x0 + 1);
+  const z1 = Math.min(HEIGHT_HEIGHT - 1, z0 + 1);
+  const fx = u - x0;
+  const fz = v - z0;
+  const a = HEIGHT_VALUES[z0 * HEIGHT_WIDTH + x0] ?? 0;
+  const b = HEIGHT_VALUES[z0 * HEIGHT_WIDTH + x1] ?? a;
+  const c = HEIGHT_VALUES[z1 * HEIGHT_WIDTH + x0] ?? a;
+  const d = HEIGHT_VALUES[z1 * HEIGHT_WIDTH + x1] ?? b;
+  return (a * (1 - fx) + b * fx) * (1 - fz) + (c * (1 - fx) + d * fx) * fz;
+}
+
+/**
+ * Projects a coordinate onto the actual terrain surface exported from the DEM.
+ * This removes the "floating" route and camp markers.
+ */
+function project(lat: number, lng: number): Vector3 {
   return new Vector3(
     (lng - CENTER_LNG) * METERS_PER_DEG_LNG * HORIZONTAL_SCALE,
-    ((altitude - BASE_ELEVATION) / (PEAK_ELEVATION - BASE_ELEVATION)) * MODEL_HEIGHT,
+    sampleTerrainHeight(lat, lng) + 0.008,
     -(lat - CENTER_LAT) * METERS_PER_DEG_LAT * HORIZONTAL_SCALE,
   );
 }
 
 function RouteRibbon({ route }: { route: Route }) {
   const geometry = useMemo(() => {
-    const points = route.geometry.map((point) => project(point.lat, point.lng, point.alt));
+    const points = route.geometry.map((point) => project(point.lat, point.lng));
     const curve = new CatmullRomCurve3(points, false, 'centripetal', 0.4);
     const segments = 180;
     const positions: number[] = [];
@@ -61,7 +87,7 @@ function RouteRibbon({ route }: { route: Route }) {
           .clone()
           .multiplyScalar(Math.cos(angle) * radius)
           .add(up.clone().multiplyScalar(Math.sin(angle) * radius));
-        positions.push(point.x + offset.x, point.y + offset.y + 0.035, point.z + offset.z);
+        positions.push(point.x + offset.x, point.y + offset.y + 0.012, point.z + offset.z);
       }
     }
 
@@ -101,7 +127,7 @@ function CampMarker({
   active: boolean;
   onSelectCamp: (campId: string) => void;
 }) {
-  const position = useMemo(() => project(camp.lat, camp.lng, camp.altitude), [camp]);
+  const position = useMemo(() => project(camp.lat, camp.lng), [camp]);
 
   return (
     <group position={position}>
@@ -113,7 +139,7 @@ function CampMarker({
       )}
       <mesh
         renderOrder={13}
-        position={[0, 0.035, 0]}
+        position={[0, 0.022, 0]}
         onClick={(event) => {
           event.stopPropagation();
           onSelectCamp(camp.id);
@@ -173,7 +199,7 @@ function CameraRig({
   useEffect(() => {
     const camp = route.camps.find((item) => item.id === activeCampId);
     if (camp) {
-      const point = project(camp.lat, camp.lng, camp.altitude);
+      const point = project(camp.lat, camp.lng);
       desiredTarget.current.set(point.x, point.y, point.z);
       desiredPosition.current.set(point.x + 1.5, point.y + 0.8, point.z + 1.9);
     } else {
@@ -219,6 +245,48 @@ function CameraRig({
   );
 }
 
+function Snowfall({ count = 320 }: { count?: number }) {
+  const points = useRef<ThreePoints>(null);
+  const reduced = useReducedMotion();
+  const positions = useMemo(() => {
+    const values = new Float32Array(count * 3);
+    for (let index = 0; index < count; index += 1) {
+      values[index * 3] = (Math.random() - 0.5) * 5.2;
+      values[index * 3 + 1] = Math.random() * 3.1;
+      values[index * 3 + 2] = (Math.random() - 0.5) * 5.2;
+    }
+    return values;
+  }, [count]);
+
+  useFrame((_, delta) => {
+    if (reduced || !points.current) return;
+    const attribute = points.current.geometry.getAttribute('position');
+    const values = attribute.array as Float32Array;
+    for (let index = 0; index < count; index += 1) {
+      const yIndex = index * 3 + 1;
+      values[yIndex] = (values[yIndex] ?? 0) - delta * 0.075;
+      if ((values[yIndex] ?? 0) < 0.15) values[yIndex] = 3.1;
+    }
+    attribute.needsUpdate = true;
+  });
+
+  return (
+    <points ref={points} frustumCulled={false} renderOrder={8}>
+      <bufferGeometry>
+        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
+      </bufferGeometry>
+      <pointsMaterial
+        color="#f8fafc"
+        size={0.014}
+        sizeAttenuation
+        transparent
+        opacity={0.62}
+        depthWrite={false}
+      />
+    </points>
+  );
+}
+
 function Terrain() {
   const gltf = useGLTF(withBase('/models/everest.glb'));
   const model = useMemo(() => {
@@ -253,14 +321,15 @@ function SceneContent({
     <>
       <color attach="background" args={['#0f172a']} />
       <fog attach="fog" args={['#0f172a', 7.5, 14]} />
-      <ambientLight intensity={0.65} color="#e2e8f0" />
-      <hemisphereLight intensity={0.45} color="#ffffff" groundColor="#64748b" />
-      <directionalLight position={[4.5, 6, 3.5]} intensity={1.85} color="#ffffff" />
-      <directionalLight position={[-4, 2.5, -3]} intensity={0.5} color="#cbd5e1" />
-      <pointLight position={[-2.5, 2.8, 3]} intensity={3.5} distance={7} color="#94a3b8" />
+      <ambientLight intensity={0.58} color="#dbeafe" />
+      <hemisphereLight intensity={0.4} color="#ffffff" groundColor="#1e293b" />
+      <directionalLight position={[4.5, 6, 3.5]} intensity={2.1} color="#ffffff" />
+      <directionalLight position={[-4, 2.5, -3]} intensity={0.8} color="#93c5fd" />
+      <pointLight position={[-2.5, 2.8, 3]} intensity={4} distance={7} color="#bfdbfe" />
 
       <group rotation={[0, -0.04, 0]}>
         <Terrain />
+        <Snowfall />
         <RouteRibbon route={route} />
         {route.camps.map((camp) => (
           <CampMarker

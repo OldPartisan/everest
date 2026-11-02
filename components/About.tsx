@@ -28,7 +28,7 @@ export default function About() {
                 <article className="group h-full bg-bg-0 p-6 transition-colors duration-500 hover:bg-bg-1 md:p-8">
                   <div className="mb-8 flex items-center justify-between">
                     <span className="mono-label">{card.label}</span>
-                    <span className="font-display text-[10px] font-semibold tracking-[0.16em] text-line">
+                    <span className="font-display text-[10px] font-semibold tracking-[0.16em] text-accent">
                       0{index + 1}
                     </span>
                   </div>

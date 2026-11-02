@@ -20,7 +20,7 @@
 - **Framer Motion** — появление секций, счётчики, раскрытие таймлайна, модальные окна.
 - **GSAP ScrollTrigger** — параллакс hero и «прорисовка» линии таймлайна.
 - **React Three Fiber + Drei** — 3D-модель массива Эвереста (GLB, SRTM/DEM), маршрут и лагеря.
-- **Leaflet + OpenStreetMap** — карта без API-ключей, grayscale-стилизация, flyTo по лагерям.
+- **MapLibre GL JS + OpenStreetMap** — карта без API-ключей и без Leaflet: grayscale-стилизация, flyTo по лагерям, атрибуция OSM.
 - **Zod** — валидация JSON-данных на этапе сборки.
 - Деплой — **GitHub Pages**, ветка `gh-pages`; готовый workflow для Actions лежит в `docs/github-actions-deploy.yml`.
 
@@ -95,7 +95,7 @@ GitHub Pages отдаёт только статические файлы, поэ
 ```text
 .
 ├── app/
-│   ├── globals.css          # токены, типографика, Leaflet, 3D-подписи, motion
+│   ├── globals.css          # токены, типографика, MapLibre, 3D-подписи, motion
 │   ├── layout.tsx           # metadata, OG, JSON-LD, шрифты, header/footer
 │   ├── page.tsx             # сборка секций
 │   ├── not-found.tsx        # кастомная 404 → out/404.html
@@ -107,7 +107,7 @@ GitHub Pages отдаёт только статические файлы, поэ
 │   ├── About.tsx
 │   ├── Timeline.tsx
 │   ├── RouteExplorer.tsx    # маршруты, лагеря, карта + 3D
-│   ├── RoutesMap.tsx        # Leaflet
+│   ├── RoutesMap.tsx        # MapLibre + OpenStreetMap
 │   ├── Everest3D.tsx        # lazy-обёртка, WebGL-fallback, мобильный режим
 │   ├── MountainScene.tsx    # R3F-сцена, GLB, камера, маршрут
 │   ├── MountainRidges.tsx
@@ -136,7 +136,9 @@ GitHub Pages отдаёт только статические файлы, поэ
 ├── public/
 │   ├── .nojekyll
 │   ├── images/
-│   ├── models/everest.glb
+│   ├── models/
+│   │   ├── everest.glb
+│   │   └── terrain-heightmap.json
 │   ├── favicon.svg
 │   ├── favicon.ico
 │   ├── favicon-32.png
@@ -195,13 +197,14 @@ GitHub Pages отдаёт только статические файлы, поэ
 python3 scripts/generate_model.py /path/N27E086.hgt /path/N28E086.hgt
 ```
 
-Модель использует сглаженные нормали, вершинные цвета «снег/скала» и лёгкое затухание к краям.
-Вертикальное преувеличение ≈4× подписано в интерфейсе. Это визуализация, а не навигационный
-трек.
+Модель использует сглаженные нормали, вершинные цвета «снег/скала», снежную подсветку и
+лёгкий снегопад. Маркеры лагерей и линия маршрута проецируются на экспортированную
+`terrain-heightmap.json`, поэтому не висят в воздухе. Вертикальное преувеличение ≈4×
+подписано в интерфейсе. Это визуализация, а не навигационный трек.
 
 ## Производительность и доступность
 
-- 3D и Leaflet загружаются лениво при приближении к секции; на мобильных вкладка «3D-рельеф»
+- 3D и карта загружаются лениво при приближении к секции; на мобильных вкладка «3D-рельеф»
   открывается по умолчанию; при отсутствии WebGL показывается изображение с резервным описанием.
 - Есть fallback при отсутствии WebGL и error boundary для сцены.
 - Контент виден до гидратации и без JavaScript: `Reveal` не скрывает блоки полностью, числа
@@ -255,7 +258,7 @@ Lighthouse на **живом GitHub Pages**:
 - Тексты и подборка данных — CC BY 4.0.
 - Фотографии — CC BY 4.0 / CC BY-SA 2.5, авторы указаны в футере и `imageCredits`.
 - SRTM — NASA/USGS, public domain.
-- Карта — © OpenStreetMap contributors, ODbL.
+- Карта — © OpenStreetMap contributors (ODbL).
 
 ---
 

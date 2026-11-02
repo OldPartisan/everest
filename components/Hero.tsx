@@ -17,7 +17,7 @@ const intro = {
 };
 
 const item = {
-  hidden: { opacity: 0.92, y: 26 },
+  hidden: { opacity: 1, y: 26 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.9, ease } },
 };
 
@@ -177,7 +177,7 @@ export default function Hero() {
       <div ref={content} className="relative z-10 flex min-h-[100svh] flex-col pb-8 pt-28 md:pb-10 md:pt-32">
         <div className="shell flex-1">
           <motion.div
-            initial={reduced ? false : { opacity: 0.92 }}
+            initial={reduced ? false : { opacity: 1 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 0.15 }}
             className="flex items-start justify-between gap-6 text-[10px] font-medium uppercase tracking-[0.2em] text-white/70"
@@ -223,7 +223,7 @@ export default function Hero() {
 
           <div className="relative">
             <motion.div
-              initial={reduced ? false : { opacity: 0.92, y: 20 }}
+              initial={reduced ? false : { opacity: 1, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1, delay: 0.7, ease }}
               className="grid gap-8 border-t border-white/20 pt-6 md:grid-cols-[1fr_auto] md:items-end"
