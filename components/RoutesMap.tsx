@@ -1,5 +1,6 @@
 'use client';
 
+import { useReducedMotion } from 'framer-motion';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useEffect, useMemo } from 'react';
@@ -56,6 +57,7 @@ function MapController({
   visible,
 }: Pick<RoutesMapProps, 'route' | 'activeCampId' | 'visible'>) {
   const map = useMap();
+  const reduced = useReducedMotion();
 
   useEffect(() => {
     if (!visible) return;
@@ -67,18 +69,22 @@ function MapController({
     if (!visible) return;
     const points = route.geometry.map((point) => L.latLng(point.lat, point.lng));
     const bounds = L.latLngBounds(points);
-    map.fitBounds(bounds, { padding: [34, 34], animate: true, duration: 0.7 });
-  }, [map, route, visible]);
+    map.fitBounds(bounds, {
+      padding: [34, 34],
+      animate: !reduced,
+      duration: reduced ? 0 : 0.7,
+    });
+  }, [map, reduced, route, visible]);
 
   useEffect(() => {
     if (!visible || !activeCampId) return;
     const camp = route.camps.find((item) => item.id === activeCampId);
     if (!camp) return;
     map.flyTo([camp.lat, camp.lng], camp.type === 'summit' ? 11 : 12, {
-      duration: 1.2,
+      duration: reduced ? 0 : 1.2,
       easeLinearity: 0.2,
     });
-  }, [activeCampId, map, route, visible]);
+  }, [activeCampId, map, reduced, route, visible]);
 
   return null;
 }
