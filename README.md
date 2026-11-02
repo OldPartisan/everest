@@ -18,7 +18,7 @@
 - **React Three Fiber + Drei** — 3D-модель массива Эвереста (GLB, SRTM/DEM), маршрут и лагеря.
 - **Leaflet + OpenStreetMap** — карта без API-ключей, grayscale-стилизация, flyTo по лагерям.
 - **Zod** — валидация JSON-данных на этапе сборки.
-- Деплой — **GitHub Actions → GitHub Pages**.
+- Деплой — **GitHub Pages**, ветка `gh-pages`; готовый workflow для Actions лежит в `docs/github-actions-deploy.yml`.
 
 ## Быстрый старт
 
@@ -142,7 +142,8 @@ GitHub Pages отдаёт только статические файлы, поэ
 │   ├── generate_model.py    # SRTM → компактный GLB
 │   └── preview.mjs          # локальный preview с /everest
 ├── docs/research.md         # исследовательские заметки и факт-чек
-├── .github/workflows/deploy.yml
+├── .github/
+│   └── (workflow-шаблон: docs/github-actions-deploy.yml)
 ├── next.config.js
 ├── tailwind.config.ts
 ├── package.json
@@ -217,17 +218,23 @@ python3 scripts/generate_model.py /path/N27E086.hgt /path/N28E086.hgt
 
 ## Деплой на GitHub Pages
 
-1. Репозиторий: **public**, имя **`everest`** под аккаунтом `oldpartisan`.
-2. **Settings → Pages → Source: GitHub Actions**.
-3. Push в `main` запускает `.github/workflows/deploy.yml`:
+Текущая публикация: **ветка `gh-pages`**, источник Pages — `Deploy from a branch` →
+`gh-pages` / `/ (root)`. Сайт: **https://oldpartisan.github.io/everest/**.
+
+Почему не Actions в этом запуске: токен среды публикации не имел OAuth-scope `workflow`,
+поэтому GitHub отклонил push файла `.github/workflows/deploy.yml`. Код, workflow-шаблон и
+инструкция готовы; для перехода на Actions достаточно:
+
+1. Взять токен/аккаунт с правом `workflow`.
+2. Скопировать `docs/github-actions-deploy.yml` в `.github/workflows/deploy.yml`.
+3. **Settings → Pages → Source: GitHub Actions**.
+4. Push в `main` — workflow выполнит:
    `checkout → setup-node 20 → npm ci → npm run build → configure-pages →
    upload-pages-artifact (./out) → deploy-pages`.
-4. Сайт появится на `https://oldpartisan.github.io/everest/`.
-5. Резервный вариант: опубликовать содержимое `out/` в ветке `gh-pages` (не требуется, если
-   Actions включён).
 
-`public/.nojekyll` уже включён. Кастомная 404 собирается в `out/404.html` и будет отдана
-GitHub Pages для несуществующих путей.
+Резервный вариант (использован сейчас): `out/` опубликован в ветке `gh-pages`.
+`public/.nojekyll` включён, кастомная 404 собирается в `out/404.html` и отдаётся GitHub Pages
+для несуществующих путей.
 
 ## Лицензии
 
